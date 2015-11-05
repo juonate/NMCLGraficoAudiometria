@@ -8,11 +8,9 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.List;
 import java.awt.Shape;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
@@ -28,16 +26,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.AxisState;
-import org.jfree.chart.axis.DateAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.axis.TickUnits;
 import org.jfree.chart.plot.SeriesRenderingOrder;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
-import org.jfree.ui.RectangleEdge;
 import org.jfree.util.ShapeUtilities;
 
 /**
@@ -137,28 +133,16 @@ public class Audiometria extends HttpServlet {
         rangeAxis.setTickUnit(new NumberTickUnit(10));
 
         //Configuración eje X
-//        NumberAxis axis = (NumberAxis) plot.getDomainAxis();
-//        axis.setRange(0, 8000);
+        NumberAxis axis = (NumberAxis) plot.getDomainAxis();
+        axis.setRange(0, 8000);
 //        axis.setStandardTickUnits(tickUnits);
-
-        NumberAxis dateAxis = new NumberAxis() {
-            public java.util.List refreshTicks(Graphics2D g2, AxisState state, Rectangle2D dataArea, RectangleEdge edge) {
-                java.util.List result = super.refreshTicks(g2, state, dataArea, edge);
-                result.add(new Integer(125));
-                result.add(new Integer(250));
-                result.add(new Integer(500));
-                result.add(new Integer(1000));
-                result.add(new Integer(2000));
-                result.add(new Integer(3000));
-                result.add(new Integer(5000));
-                result.add(new Integer(6000));
-                result.add(new Integer(8000));
-                return result;
-            }
-        ;
-        }; 
-        plot.setDomainAxis(dateAxis);
-
+        axis.setTickUnit(new NumberTickUnit(1000));
+//        axis.setAutoTickUnitSelection(false);
+//        TickUnits units = new TickUnits();
+//        units.add(new NumberTickUnit(100));
+//        axis.setStandardTickUnits(units);
+//        axis.setVerticalTickLabels(true);
+        
         RenderedImage imagenGrafico = chart.createBufferedImage(600, 300);
         ImageIO.write(imagenGrafico, "png", os);
         os.flush();
