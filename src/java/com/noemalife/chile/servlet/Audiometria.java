@@ -11,10 +11,12 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.font.GlyphVector;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,14 +28,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.AxisState;
+import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTick;
 import org.jfree.chart.axis.NumberTickUnit;
-import org.jfree.chart.axis.TickUnits;
+import org.jfree.chart.axis.TickType;
 import org.jfree.chart.plot.SeriesRenderingOrder;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.ui.RectangleEdge;
 import org.jfree.util.ShapeUtilities;
 
 /**
@@ -130,18 +136,53 @@ public class Audiometria extends HttpServlet {
         plot.getRangeAxis().setInverted(true);
         plot.getRangeAxis().setRange(-10, 120);
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
+        rangeAxis.setTickLabelFont(new Font("Times", Font.PLAIN, 9));
         rangeAxis.setTickUnit(new NumberTickUnit(10));
 
         //Configuración eje X
-        NumberAxis axis = (NumberAxis) plot.getDomainAxis();
-        axis.setRange(0, 8000);
+//        NumberAxis axis = (NumberAxis) plot.getDomainAxis();
+//        axis.setRange(0, 8000);
 //        axis.setStandardTickUnits(tickUnits);
-        axis.setTickUnit(new NumberTickUnit(1000));
+//        axis.setTickUnit(new NumberTickUnit(1000));
 //        axis.setAutoTickUnitSelection(false);
 //        TickUnits units = new TickUnits();
 //        units.add(new NumberTickUnit(100));
 //        axis.setStandardTickUnits(units);
 //        axis.setVerticalTickLabels(true);
+        
+        NumberAxis myAxis = new NumberAxis(plot.getDomainAxis().getLabel()) {
+
+            @Override
+            public List refreshTicks(Graphics2D g2, AxisState state,
+                    Rectangle2D dataArea, RectangleEdge edge) {
+
+                List allTicks = super.refreshTicks(g2, state, dataArea, edge);
+                List myTicks = new ArrayList();
+
+                for (Object tick : allTicks) {
+                    NumberTick numberTick = (NumberTick) tick;
+                    System.out.println(numberTick.getNumber()+" <==> "+numberTick.getTickType());
+                    if (TickType.MAJOR.equals(numberTick.getTickType())
+                            && (numberTick.getValue() != 125 && numberTick.getValue() != 250 &&
+                            numberTick.getValue() != 500 && numberTick.getValue() != 1000 &&
+                            numberTick.getValue() != 2000 && numberTick.getValue() != 3000 &&
+                            numberTick.getValue() != 4000 && numberTick.getValue() != 6000 &&
+                            numberTick.getValue() != 8000)) {
+                        myTicks.add(new NumberTick(TickType.MINOR, numberTick.getValue(), "",
+                                numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
+                                numberTick.getAngle()));
+                        continue;
+                    }
+                    myTicks.add(tick);
+                }
+                return myTicks;
+            }
+        };
+        myAxis.setTickUnit(new NumberTickUnit(125));
+        myAxis.setTickLabelFont(new Font("Times", Font.PLAIN, 9));
+        myAxis.setVerticalTickLabels(true);
+        plot.setDomainAxis(myAxis);
+        myAxis.configure();
         
         RenderedImage imagenGrafico = chart.createBufferedImage(600, 300);
         ImageIO.write(imagenGrafico, "png", os);
