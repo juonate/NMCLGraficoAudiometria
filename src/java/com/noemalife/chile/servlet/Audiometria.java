@@ -29,7 +29,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.AxisState;
-import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.axis.NumberTick;
 import org.jfree.chart.axis.NumberTickUnit;
@@ -163,22 +162,68 @@ public class Audiometria extends HttpServlet {
                     NumberTick numberTick = (NumberTick) tick;
                     System.out.println(numberTick.getNumber()+" <==> "+numberTick.getTickType());
                     if (TickType.MAJOR.equals(numberTick.getTickType())
-                            && (numberTick.getValue() != 125 && numberTick.getValue() != 250 &&
-                            numberTick.getValue() != 500 && numberTick.getValue() != 1000 &&
-                            numberTick.getValue() != 2000 && numberTick.getValue() != 3000 &&
-                            numberTick.getValue() != 4000 && numberTick.getValue() != 6000 &&
-                            numberTick.getValue() != 8000)) {
+                            && (numberTick.getValue() != 1000 && numberTick.getValue() != 2000 &&
+                            numberTick.getValue() != 3000 && numberTick.getValue() != 4000 &&
+                            numberTick.getValue() != 5000 && numberTick.getValue() != 6000 &&
+                            numberTick.getValue() != 7000 && numberTick.getValue() != 8000 &&
+                            numberTick.getValue() != 9000)) {
                         myTicks.add(new NumberTick(TickType.MINOR, numberTick.getValue(), "",
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
                                 numberTick.getAngle()));
                         continue;
                     }
-                    myTicks.add(tick);
+                    if(numberTick.getValue() == 1000){
+                        System.out.println(tick.toString());
+                        myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "125",
+                                numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
+                                numberTick.getAngle()));
+                    } if(numberTick.getValue() == 2000){
+                        System.out.println(tick.toString());
+                        myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "250",
+                                numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
+                                numberTick.getAngle()));
+                    }  if(numberTick.getValue() == 3000){
+                        System.out.println(tick.toString());
+                        myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "500",
+                                numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
+                                numberTick.getAngle()));
+                    } if(numberTick.getValue() == 4000){
+                        System.out.println(tick.toString());
+                        myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "1000",
+                                numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
+                                numberTick.getAngle()));
+                    } if(numberTick.getValue() == 5000){
+                        System.out.println(tick.toString());
+                        myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "2000",
+                                numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
+                                numberTick.getAngle()));
+                    } if(numberTick.getValue() == 6000){
+                        System.out.println(tick.toString());
+                        myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "3000",
+                                numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
+                                numberTick.getAngle()));
+                    } if(numberTick.getValue() == 7000){
+                        System.out.println(tick.toString());
+                        myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "4000",
+                                numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
+                                numberTick.getAngle()));
+                    } if(numberTick.getValue() == 8000){
+                        System.out.println(tick.toString());
+                        myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "6000",
+                                numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
+                                numberTick.getAngle()));
+                    } if(numberTick.getValue() == 9000){
+                        System.out.println(tick.toString());
+                        myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "8000",
+                                numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
+                                numberTick.getAngle()));
+                    } 
+                    //myTicks.add(tick);
                 }
                 return myTicks;
             }
         };
-        myAxis.setTickUnit(new NumberTickUnit(125));
+        myAxis.setTickUnit(new NumberTickUnit(500));
         myAxis.setTickLabelFont(new Font("Times", Font.PLAIN, 9));
         myAxis.setVerticalTickLabels(true);
         plot.setDomainAxis(myAxis);
