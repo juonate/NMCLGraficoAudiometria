@@ -34,6 +34,7 @@ import org.jfree.chart.axis.NumberTick;
 import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.axis.TickType;
 import org.jfree.chart.plot.SeriesRenderingOrder;
+import org.jfree.chart.plot.ValueMarker;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
@@ -114,15 +115,15 @@ public class Audiometria extends HttpServlet {
                         1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
                         1.0f, new float[]{10.0f, 6.0f}, 0.0f));
 //                renderer.setSeriesShape(2, ShapeUtilities.createDiamond(3));
-                renderer.setSeriesShape(2, generateShapeFromText(new Font("Garamond", Font.BOLD, 11), ">"));
-                renderer.setSeriesPaint(2, Color.BLUE);
+                renderer.setSeriesShape(2, generateShapeFromText(new Font("Garamond", Font.BOLD, 11), "<"));
+                renderer.setSeriesPaint(2, Color.RED);
             } else if (i == 3) {
                 renderer.setSeriesStroke(
                         3, new BasicStroke(
                         1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
                         1.0f, new float[]{10.0f, 6.0f}, 0.0f));
-                renderer.setSeriesShape(3, generateShapeFromText(new Font("Garamond", Font.BOLD, 11), "<"));
-                renderer.setSeriesPaint(3, Color.RED);
+                renderer.setSeriesShape(3, generateShapeFromText(new Font("Garamond", Font.BOLD, 11), ">"));
+                renderer.setSeriesPaint(3, Color.BLUE);
             } else {
                 renderer.setSeriesPaint(i, Color.LIGHT_GRAY);
                 renderer.setSeriesStroke(i, new BasicStroke(2.0f));
@@ -132,6 +133,12 @@ public class Audiometria extends HttpServlet {
         plot.setRenderer(renderer);
 
         //Configuración eje Y
+        ValueMarker markerY = new ValueMarker(25);
+        markerY.setPaint(Color.BLACK);
+        markerY.setStroke(new BasicStroke(
+                        1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND,
+                        1.0f, new float[]{6.0f, 6.0f}, 0.0f));
+        plot.addRangeMarker(markerY);
         plot.getRangeAxis().setInverted(true);
         plot.getRangeAxis().setRange(-10, 120);
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
@@ -149,6 +156,11 @@ public class Audiometria extends HttpServlet {
 //        axis.setStandardTickUnits(units);
 //        axis.setVerticalTickLabels(true);
         
+        ValueMarker markerX = new ValueMarker(403);
+        markerX.setPaint(Color.BLACK);
+        markerX.setStroke(new BasicStroke(2));
+        plot.addDomainMarker(markerX);
+        
         NumberAxis myAxis = new NumberAxis(plot.getDomainAxis().getLabel()) {
 
             @Override
@@ -162,57 +174,57 @@ public class Audiometria extends HttpServlet {
                     NumberTick numberTick = (NumberTick) tick;
                     System.out.println(numberTick.getNumber()+" <==> "+numberTick.getTickType());
                     if (TickType.MAJOR.equals(numberTick.getTickType())
-                            && (numberTick.getValue() != 1000 && numberTick.getValue() != 2000 &&
-                            numberTick.getValue() != 3000 && numberTick.getValue() != 4000 &&
-                            numberTick.getValue() != 5000 && numberTick.getValue() != 6000 &&
-                            numberTick.getValue() != 7000 && numberTick.getValue() != 8000 &&
-                            numberTick.getValue() != 9000)) {
+                            && (numberTick.getValue() != 100 && numberTick.getValue() != 200 &&
+                            numberTick.getValue() != 300 && numberTick.getValue() != 400 &&
+                            numberTick.getValue() != 500 && numberTick.getValue() != 600 &&
+                            numberTick.getValue() != 700 && numberTick.getValue() != 800 &&
+                            numberTick.getValue() != 900)) {
                         myTicks.add(new NumberTick(TickType.MINOR, numberTick.getValue(), "",
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
                                 numberTick.getAngle()));
                         continue;
                     }
-                    if(numberTick.getValue() == 1000){
+                    if(numberTick.getValue() == 100){
                         System.out.println(tick.toString());
                         myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "125",
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
                                 numberTick.getAngle()));
-                    } if(numberTick.getValue() == 2000){
+                    } if(numberTick.getValue() == 200){
                         System.out.println(tick.toString());
                         myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "250",
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
                                 numberTick.getAngle()));
-                    }  if(numberTick.getValue() == 3000){
+                    }  if(numberTick.getValue() == 300){
                         System.out.println(tick.toString());
                         myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "500",
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
                                 numberTick.getAngle()));
-                    } if(numberTick.getValue() == 4000){
+                    } if(numberTick.getValue() == 400){
                         System.out.println(tick.toString());
                         myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "1000",
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
                                 numberTick.getAngle()));
-                    } if(numberTick.getValue() == 5000){
+                    } if(numberTick.getValue() == 500){
                         System.out.println(tick.toString());
                         myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "2000",
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
                                 numberTick.getAngle()));
-                    } if(numberTick.getValue() == 6000){
+                    } if(numberTick.getValue() == 600){
                         System.out.println(tick.toString());
                         myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "3000",
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
                                 numberTick.getAngle()));
-                    } if(numberTick.getValue() == 7000){
+                    } if(numberTick.getValue() == 700){
                         System.out.println(tick.toString());
                         myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "4000",
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
                                 numberTick.getAngle()));
-                    } if(numberTick.getValue() == 8000){
+                    } if(numberTick.getValue() == 800){
                         System.out.println(tick.toString());
                         myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "6000",
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
                                 numberTick.getAngle()));
-                    } if(numberTick.getValue() == 9000){
+                    } if(numberTick.getValue() == 900){
                         System.out.println(tick.toString());
                         myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "8000",
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
@@ -223,13 +235,13 @@ public class Audiometria extends HttpServlet {
                 return myTicks;
             }
         };
-        myAxis.setTickUnit(new NumberTickUnit(500));
+//        myAxis.setTickUnit(new NumberTickUnit(500));
         myAxis.setTickLabelFont(new Font("Times", Font.PLAIN, 9));
         myAxis.setVerticalTickLabels(true);
         plot.setDomainAxis(myAxis);
         myAxis.configure();
         
-        RenderedImage imagenGrafico = chart.createBufferedImage(600, 300);
+        RenderedImage imagenGrafico = chart.createBufferedImage(500, 400);
         ImageIO.write(imagenGrafico, "png", os);
         os.flush();
         os.close();
