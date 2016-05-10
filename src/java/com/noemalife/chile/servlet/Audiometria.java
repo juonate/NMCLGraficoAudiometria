@@ -40,6 +40,7 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.RectangleEdge;
+import org.jfree.ui.TextAnchor;
 import org.jfree.util.ShapeUtilities;
 
 /**
@@ -98,6 +99,8 @@ public class Audiometria extends HttpServlet {
         plot.setBackgroundPaint(Color.LIGHT_GRAY);
         plot.setSeriesRenderingOrder(SeriesRenderingOrder.FORWARD);
 
+        
+        
         XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
         System.out.println("Cantidad de series: " + dataset.getSeriesCount());
         for (int i = 0; i < dataset.getSeriesCount(); i++) {
@@ -144,18 +147,20 @@ public class Audiometria extends HttpServlet {
         NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
         rangeAxis.setTickLabelFont(new Font("Times", Font.PLAIN, 9));
         rangeAxis.setTickUnit(new NumberTickUnit(10));
-
-        //Configuración eje X
-//        NumberAxis axis = (NumberAxis) plot.getDomainAxis();
-//        axis.setRange(0, 8000);
-//        axis.setStandardTickUnits(tickUnits);
-//        axis.setTickUnit(new NumberTickUnit(1000));
-//        axis.setAutoTickUnitSelection(false);
-//        TickUnits units = new TickUnits();
-//        units.add(new NumberTickUnit(100));
-//        axis.setStandardTickUnits(units);
-//        axis.setVerticalTickLabels(true);
         
+        
+       
+         //Configuración eje X    
+        NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
+        xAxis.setLowerBound(0);
+        xAxis.setUpperBound(900);
+    
+         
+         //NumberAxis daxis = (NumberAxis) plot.getDomainAxis();
+         //plot.getDomainAxis().setTickLabelFont(new Font("Times", Font.PLAIN, 9));
+         //daxis.setTickUnit(new NumberTickUnit(10));
+
+     
         ValueMarker markerX = new ValueMarker(403);
         markerX.setPaint(Color.BLACK);
         markerX.setStroke(new BasicStroke(2));
@@ -169,10 +174,11 @@ public class Audiometria extends HttpServlet {
 
                 List allTicks = super.refreshTicks(g2, state, dataArea, edge);
                 List myTicks = new ArrayList();
-
+               
+   
                 for (Object tick : allTicks) {
                     NumberTick numberTick = (NumberTick) tick;
-                    System.out.println(numberTick.getNumber()+" <==> "+numberTick.getTickType());
+                   
                     if (TickType.MAJOR.equals(numberTick.getTickType())
                             && (numberTick.getValue() != 100 && numberTick.getValue() != 200 &&
                             numberTick.getValue() != 300 && numberTick.getValue() != 400 &&
@@ -186,6 +192,7 @@ public class Audiometria extends HttpServlet {
                     }
                     if(numberTick.getValue() == 100){
                         System.out.println(tick.toString());
+                        System.out.println(numberTick.getTextAnchor());
                         myTicks.add(new NumberTick(TickType.MAJOR, numberTick.getValue(), "125",
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
                                 numberTick.getAngle()));
@@ -230,13 +237,19 @@ public class Audiometria extends HttpServlet {
                                 numberTick.getTextAnchor(), numberTick.getRotationAnchor(),
                                 numberTick.getAngle()));
                     } 
-                    //myTicks.add(tick);
+                    
+                   // lastDomainValue=numberTick.getValue();
+                    
+                    
                 }
+         
+                
                 return myTicks;
             }
         };
-//        myAxis.setTickUnit(new NumberTickUnit(500));
+
         myAxis.setTickLabelFont(new Font("Times", Font.PLAIN, 9));
+        myAxis.setRange(0, 900);
         myAxis.setVerticalTickLabels(true);
         plot.setDomainAxis(myAxis);
         myAxis.configure();
